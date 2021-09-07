@@ -54,6 +54,7 @@ class SolutionRomanNumerals() {
 
     private val listRoman = mutableListOf<Int>()
     fun romanToInt(s: String): Int {
+
         val stringArray = s.split("")
         for (i in stringArray.indices) {
             if (stringArray[i] != "") {
@@ -498,6 +499,20 @@ class DeleteDuplicatesMedium {
     }
 }
 
+class Oursky {
+    fun test(firstList:List<String>,secondList:List<String>):Boolean{
+        if (firstList.isNotEmpty() && secondList.isNotEmpty()){
+             for (i in secondList.indices){
+                 if (!firstList.contains(secondList[i])){
+                     return false
+                 }
+             }
+
+        }
+     return true
+    }
+}
+
 
 fun main() {
 //    val solution = Solution()
@@ -561,8 +576,11 @@ fun main() {
     l3.next = l4
     l4.next = l5
 
-    val delete = DeleteDuplicatesMedium()
-    checkList(delete.deleteDuplicates(l1))
+//    val delete = DeleteDuplicatesMedium()
+//    checkList(delete.deleteDuplicates(l1))
+
+    val oursky = Oursky()
+    print(oursky.test(listOf("A","D","E"), listOf("A","A","D","E")))
 
 
 
