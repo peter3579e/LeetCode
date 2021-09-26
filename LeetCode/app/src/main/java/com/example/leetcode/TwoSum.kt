@@ -1,7 +1,10 @@
 package com.example.leetcode
 
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.math.ln
 
 class Solution {
     fun twoSum(nums: IntArray, target: Int): IntArray? {
@@ -33,7 +36,7 @@ class SolutionForReverseInteger {
 }
 
 class SolutionPalindromeNumber() {
-    fun isPalindrome(x: Int): Boolean {
+    fun isPalindrome(x: Int): Int {
 
         var reversedNumber = 0
         var y = x
@@ -43,11 +46,188 @@ class SolutionPalindromeNumber() {
             reversedNumber = reversedNumber * 10 + pop
         }
         return if (x < 0 || x != reversedNumber) {
-            false
+            1
         } else {
-            reversedNumber == x
+            reversedNumber
         }
     }
+}
+
+class Palidrom2(){
+    fun solution(S: String): String {
+
+            val stack : Stack<Char> = Stack<Char>()
+            val questionMark = "?"
+            val answer = mutableMapOf<Int,String>()
+            var count = S.length/2
+
+            if (S.length % 2 != 0){
+
+                answer.put(S.length/2, "P")
+
+            }
+
+            for (i in 0 until S.length/2){
+                val scanChar = S[i]
+                answer.put(i, S[i].toString())
+                stack.push(scanChar)
+                print("value of stack $stack \n")
+                print("the answer $answer \n")
+            }
+
+            for (i in S.length/2 until S.length){
+
+                count --
+
+                print("the value of count $count \n")
+
+                print("the value of S[i] = ${S[i]} \n")
+
+
+                if (stack.peek() == S[i]){
+                    answer.put(i, S[i].toString())
+                    answer.put(count,S[i].toString())
+                    stack.pop()
+                    if (stack.isEmpty()){
+                        return mapToString(answer)
+                    }
+                }
+
+                if (stack.peek() != S[i] && stack.peek() != questionMark[0] && S[i] != questionMark[0]){
+                    return "No"
+                }
+
+                if (stack.peek() == questionMark[0]){
+
+                    answer.put(i, S[i].toString())
+                    answer.put(count,S[i].toString())
+                    print("the value of answer = ${answer} \n")
+                    stack.pop()
+
+                    if (stack.isEmpty()){
+                        return mapToString(answer)
+                    }
+                }
+
+                if (S[i] == questionMark[0] && stack.isNotEmpty() && stack.peek() != questionMark[0]){
+
+                    answer.put(i, stack.peek().toString())
+
+                    print("the value of answer = ${answer} \n")
+                    stack.pop()
+                    print("the value of stack = ${stack} \n")
+
+                    if (stack.isEmpty()){
+                        return mapToString(answer)
+                    }
+
+                }
+
+                if (S[i] == stack.peek() && S[i] == questionMark[0] && stack.peek() == questionMark[0]){
+
+                    answer.put(i, "a")
+                    answer.put(count,"a")
+
+                    print("the value of answer = ${answer} \n")
+                    stack.pop()
+                    print("the value of stack = ${stack} \n")
+
+                    if (stack.isEmpty()){
+                        return mapToString(answer)
+                    }
+
+                }
+            }
+        return "No"
+    }
+
+    private fun mapToString(map:MutableMap<Int,String>):String{
+        var answer = ""
+        map.forEach {
+            answer += it.value
+        }
+        return answer
+    }
+}
+
+class Palidrom(){
+
+    fun solution(S: String): String {
+
+        val questionMark = "?"
+        val tempString = mutableMapOf<Int,String>()
+        var count = S.length
+        var answer = ""
+
+
+
+        for (i in 0 until count/2-1){
+
+            count --
+
+            print(count)
+
+            if (S[i] == questionMark[0] && S[count] != questionMark[0] ){
+                tempString[i] = S[count].toString()
+            }else if (S[i] == questionMark[0] && S[count] == questionMark[0]) {
+                tempString[i] = "a"
+            }else if (S[i] != questionMark[0] && S[count] != questionMark[0] && S[i] != S[count]) {
+                return "No"
+            }else if ( S[i] != questionMark[0] && S[count] == questionMark[0]){
+                tempString[i] = S[i].toString()
+            }
+            else {
+                tempString[i] = S[count].toString()
+            }
+
+        }
+
+        val convertFromMap = mapToString(tempString)
+
+        answer = if (count%2 != 0 && S[(count/2)] != questionMark[0]){
+            convertFromMap  +S[(count/2)]+ convertFromMap.reversed()
+        }else if (count%2 != 0 && S[(count/2)] == questionMark[0]) {
+            convertFromMap  +"H"+ convertFromMap.reversed()
+        } else{
+            convertFromMap  + convertFromMap.reversed()
+        }
+
+        return answer
+
+    }
+
+    private fun mapToString(map:MutableMap<Int,String>):String{
+        var answer = ""
+        map.forEach {
+            answer += it.value
+        }
+        return answer
+    }
+
+
+}
+
+
+
+internal object GFG {
+    // Function to return the smallest String
+    fun smallest(S: String): String {
+        val length = S.length
+        var returnAns = ""
+        for (i in 0 until length - 1) {
+            if (S[i] > S[i + 1]) {
+                for (j in 0 until length) {
+                    if (i != j) { returnAns += S[j] }
+                    print(returnAns)
+                }
+                return returnAns
+            }
+        }
+        returnAns = S.substring(0, length - 1)
+        print(returnAns)
+        return returnAns
+    }
+
 }
 
 class SolutionRomanNumerals() {
@@ -136,6 +316,7 @@ class CommonPrefixSolution(){
 
 class ParentheseSolution (){
     private var mappings = HashMap<Char, Char>()
+
 
 
     fun isValid(s: String): Boolean {
@@ -306,7 +487,7 @@ class MaximumSubarray(){
     fun maxSubArray(nums: IntArray): Int {
         var cMaxInt = nums[0]
         var maxInt = nums[0]
-        nums.mapIndexed{i,it->
+        nums.mapIndexed{ i, it->
             if (i>0){
                 cMaxInt = maxOf(it, cMaxInt + it)
                 maxInt = maxOf(cMaxInt, maxInt)
@@ -500,7 +681,9 @@ class DeleteDuplicatesMedium {
 }
 
 class Oursky {
-    fun test(firstList:List<String>,secondList:List<String>):Boolean{
+    fun test(firstList: List<String>, secondList: List<String>):Boolean{
+
+
         if (firstList.isNotEmpty() && secondList.isNotEmpty()){
              for (i in secondList.indices){
                  if (!firstList.contains(secondList[i])){
@@ -513,8 +696,351 @@ class Oursky {
     }
 }
 
+class LRUCache(capacity: Int) {
+
+    val head = Node(0, 0)
+    val tail = Node(0, 0)
+    val cacheCapacity = capacity
+    val map = mutableMapOf<Int, Node>()
+
+    init {
+        head.next = tail
+        tail.prev = head
+    }
+
+
+    fun get(key: Int): Int {
+        if (map.containsKey(key)){
+            val node = map.get(key)
+            remove(node!!)
+            addToHead(node)
+            return node.value
+        }else{
+            return -1
+        }
+    }
+
+    fun put(key: Int, value: Int) {
+        if (!map.containsKey(key)){
+            val node = Node(key, value)
+            addToHead(node)
+            map.put(key, node)
+            if (map.size > cacheCapacity){
+                val lastNode = tail.prev
+                remove(lastNode!!)
+                map.remove(lastNode.key)
+            }
+        }else{
+            val node = map.get(key)
+            node!!.value = value
+            remove(node)
+            addToHead(node)
+        }
+    }
+
+
+    fun addToHead(node: Node) {
+        val next = head.next
+        head.next = node
+        node.prev = head
+        next?.prev = node
+        node.next = next
+    }
+
+    fun remove(node: Node){
+        node.prev?.next = node.next
+        node.next?.prev = node.prev
+    }
+
+    data class Node(var key: Int = 0, var value: Int = 0){
+        var next: Node? = null
+        var prev: Node? = null
+    }
+
+}
+
+class Cache(capacity: Int) {
+
+    private val cacheCapacity = capacity
+    val map = mutableMapOf<Int, Node>()
+    val array = arrayListOf<Node>()
+    val head = Node(0, 0, 0.0, 0)
+    val tail = Node(0, 0, 0.0, 0)
+
+    init {
+        head.next = tail
+        tail.prev = head
+    }
+
+
+    fun get(key: Int): Int {
+        if (map.containsKey(key)){
+            val node = map.get(key)
+            return node!!.value
+        }else{
+            return -1
+        }
+    }
+
+    fun put(key: Int, value: Int, weight: Int) {
+
+        if (!map.containsKey(key)){
+            val time = System.currentTimeMillis()
+            val score = (weight/-100).toDouble()
+            val node = Node(key, value, score, time)
+            array.add(node)
+            map.put(key, node)
+
+
+            if (map.size > cacheCapacity){
+                val newArray = array.sortedByDescending {
+                    it.score
+                }
+                val lastNode = newArray[newArray.size - 1]
+                print("the remove key is ${lastNode.key} \n")
+                map.remove(lastNode.key)
+                array.remove(lastNode)
+                remove(lastNode)
+
+            }
+        }else{
+
+            val node = map.get(key)
+            val lastAccessTime = node!!.time
+            print("the last Access time = ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(lastAccessTime)} \n")
+            node.value = value
+            node.score = weight/ln((System.currentTimeMillis() - lastAccessTime).toDouble())
+            node.time = System.currentTimeMillis()
+
+            print("the new value = ${node.value} and score = ${node.score} and new time = ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(node.time)} \n")
+
+        }
+    }
+
+    private fun remove(node: Node){
+        node.prev?.next = node.next
+        node.next?.prev = node.prev
+    }
+
+    data class Node(var key: Int = 0, var value: Int = 0, var score: Double, var time: Long = 0){
+        var next: Node? = null
+        var prev: Node? = null
+    }
+
+}
+
+class Question2(capacity: Int) {
+
+    private val cacheCapacity = capacity
+    val map = mutableMapOf<Int, Node>()
+    val head = Node(0, 0, 0.0, 0)
+    val tail = Node(0, 0, 0.0, 0)
+
+    init {
+        head.next = tail
+        tail.prev = head
+    }
+
+    fun checkList(list: Node?){
+        if (list != null){
+            print(list.key)
+            checkList(list.next)
+        }
+    }
+
+
+    fun get(key: Int): Int {
+        if (map.containsKey(key)){
+            val node = map.get(key)
+            checkList(head)
+            return node!!.value
+        }else{
+            return -1
+        }
+    }
+
+    fun put(key: Int, value: Int, weight: Double) {
+
+        if (!map.containsKey(key)){
+            val time = System.currentTimeMillis()
+            val score = (weight/-100)
+            val node = Node(key, value, score, time)
+            map.put(key, node)
+            addToHead(node)
+            moveNextNode(node)
+
+            if (map.size > cacheCapacity){
+                val lastNode = tail.prev
+                remove(lastNode!!)
+                map.remove(lastNode.key)
+            }
+        }else{
+
+            val node = map.get(key)
+            val lastAccessTime = node!!.time
+            print("the last Access time = ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(lastAccessTime)} \n")
+            node.value = value
+            node.score = weight/ln((System.currentTimeMillis() - lastAccessTime).toDouble())
+            node.time = System.currentTimeMillis()
+            remove(node)
+            addToHead(node)
+            moveNextNode(node)
+
+            print("the new value = ${node.value} and score = ${node.score} and new time = ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(node.time)} \n")
+
+        }
+    }
+
+    private fun addToTail(node: Node){
+        val prev = tail.prev
+        node.prev = prev
+        node.next = tail
+        tail.prev = node
+        prev!!.next = node
+    }
+
+    fun addToHead(node: Node) {
+        val next = head.next
+        node.next = next
+        next!!.prev = node
+        head.next = node
+        node.prev = head
+    }
+
+
+    private fun moveNextNode(node: Node){
+        val originalNextNode = node.next
+        val original2NextNode = originalNextNode?.next
+
+            if (node.score < originalNextNode!!.score && originalNextNode.key != 0 ) {
+                remove(node)
+                originalNextNode.next = node
+                node.prev = originalNextNode
+                node.next = original2NextNode
+                original2NextNode?.prev = node
+                return moveNextNode(node)
+            }
+
+    }
+
+    private fun movePrevNode(node: Node){
+            val originalLastNode = node.prev
+            val original2LastNode = originalLastNode!!.prev
+        if (node.score < originalLastNode.score && original2LastNode != null){
+            remove(node)
+            originalLastNode.prev = node
+            node.next = originalLastNode
+            node.prev = original2LastNode
+            original2LastNode.next = node
+            return movePrevNode(node)
+        }
+    }
+
+    private fun remove(node: Node){
+        node.prev?.next = node.next
+        node.next?.prev = node.prev
+    }
+
+    data class Node(var key: Int = 0, var value: Int = 0, var score: Double, var time: Long = 0){
+        var next: Node? = null
+        var prev: Node? = null
+    }
+
+}
+
+class Question3 {
+
+    var tempCur = 0.0
+
+    fun recur(n: Double, cur: Double?): Double{
+
+        if ( cur == null){
+            tempCur = 0.0
+        }else{
+            tempCur = cur
+        }
+
+        if (n<2){
+            val e = IOException("Invalid Input")
+            throw e
+        }
+        if ( n == 2.0){
+            return 1 / n + tempCur
+        }
+        return recur(n - 1, tempCur + 1 / (n * (n - 1)))
+    }
+
+    fun recur2(n: Double, cur: Double?): Double {
+
+        var tempN = n
+        var tempCur = cur
+
+        for (i in 0..n.toInt()-2){
+
+            if ( tempCur == null ){
+                tempCur = 0.0
+            }
+
+            if (n<2){
+                val e = IOException("Invalid Input")
+                throw e
+            }
+            val temp2N = tempN
+
+            tempN -= 1
+
+            tempCur += (1 / (temp2N * (temp2N - 1)))
+
+            if (tempN == 2.0){
+                return 1/tempN+tempCur
+            }
+        }
+
+        return 0.0
+    }
+}
+
+class StringReverse () {
+
+    fun reverse(str: String): String {
+        var reverse = ""
+
+        for (i in str.length - 1 downTo 0) {
+            reverse = reverse + str[i]
+        }
+
+        return reverse
+    }
+
+}
+
+class Codility (){
+
+    fun solution(A: IntArray): Int {
+        val hashSet: MutableSet<Int> = HashSet()
+        val N: Int = A.size
+        for (a in A) {
+            if (a > 0) {
+                hashSet.add(a)
+            }
+        }
+        print("the size is $N and the hashset is $hashSet \n")
+        for (i in 1..N + 1) {
+            if (!hashSet.contains(i)) {
+                return i
+            }
+        }
+      return 0
+    }
+}
+
+
 
 fun main() {
+
+//    val code = Codility()
+//    print(code.solution(intArrayOf(1, 2, 3)))
+
 //    val solution = Solution()
 //    val check = solution.twoSum(intArrayOf(0,1,2,3,4,5,6),11)
 //    for (i in check!!.indices){
@@ -524,8 +1050,10 @@ fun main() {
 //    val reverse = SolutionForReverseInteger()
 //    println("result of function = ${reverse.reverse(1463847412)}")
 
-//    val palindrome = SolutionPalindromeNumber()
-//    println("result of function = ${palindrome.isPalindrome(-101)}")
+    val palindrome = Palidrom()
+    print(palindrome.solution("??a??a?b"))
+//    println("result of function = ${palindrome.solution("?ab??a")}")
+//    palindrome.s("?ab??a")
 
 //    val romanNumerals = BetterSolution()
 //   print("the result = ${romanNumerals.romanToInt("LVIII")}")
@@ -552,7 +1080,7 @@ fun main() {
 //    ScopeFunction.runThis()
 
 
-    fun checkList(list:ListNode?){
+    fun checkList(list: ListNode?){
         if (list != null){
             print(list.`val`)
             checkList(list.next)
@@ -579,8 +1107,29 @@ fun main() {
 //    val delete = DeleteDuplicatesMedium()
 //    checkList(delete.deleteDuplicates(l1))
 
-    val oursky = Oursky()
-    print(oursky.test(listOf("A","D","E"), listOf("A","A","D","E")))
+//    val oursky = Oursky()
+//    print(oursky.test(listOf("A", "D", "E"), listOf("A", "A", "D", "E")))
+
+//    val cache = Question2(4)
+//    cache.put(2,3,900.0)
+//    cache.put(3,4,500.0)
+//    cache.put(5,3,750.0)
+//    cache.put(6,4,700.0)
+////    print("${cache.get(2)} \n")
+//    cache.put(7,1,725.0)
+//    cache.put(8,10,715.0)
+//    cache.put(3,11,1000)
+//    cache.put(7,15,1500)
+//    cache.put(10,15,1500)
+
+//    cache.array.forEachIndexed { index, node ->
+//        print("remain key ${node.key} and the score is ${node.score} \n")
+//    }
+//    cache.get(3)
+
+//    print("\n ${cache.get(3)} \n")
+
+
 
 
 
